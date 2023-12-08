@@ -1,0 +1,298 @@
+1. Write a Java program to find the longest substring from a given string that doesn’ any duplicate characters.
+
+import java.util.HashMap;
+public class LongestSubstring {
+	public static String findLongestSubstring(String input) {
+        if (input == null || input.isEmpty()) {
+            return " ";
+        }
+
+        int n = input.length();
+        int ST = 0, ED = 0;
+        int maxLength = 0;
+        int currentLength;
+        HashMap<Character, Integer> charIndexMap = new HashMap<>();
+
+        while (ED < n) {
+            char currentChar = input.charAt(ED);
+
+            if (charIndexMap.containsKey(currentChar)) {
+                ST = Math.max(charIndexMap.get(currentChar) + 1, ST);
+            }
+
+            currentLength = ED - ST + 1;
+
+            if (currentLength > maxLength) {
+                maxLength = currentLength;
+            }
+
+            charIndexMap.put(currentChar, ED);
+            ED++;
+        }
+
+        return input.substring(ST, ST + maxLength);
+    }
+
+
+	public static void main(String[] args) {
+		String str = "Welcome to PowerRouter.";
+        String longestSubstring = findLongestSubstring(str);
+
+        System.out.println("Input: " + str);
+        System.out.println("Output: " + longestSubstring);
+    }
+	}
+
+
+
+
+
+2. Write a Program for the first 10 numbers of Fibonacci series.
+  public class FibonacciNumbers {
+
+	public static void main(String[] args) {
+		int n = 10;
+		fibonacciSeriesGenerate(n);
+    }
+
+    public static void fibonacciSeriesGenerate(int n) {
+        int[] fibonacciSeries = new int[n];
+
+        fibonacciSeries[0]=0;
+        fibonacciSeries[1]=1;
+
+        // Generate the Fibonacci series
+        for (int i = 2; i < n; i++) {
+        	fibonacciSeries[i] = fibonacciSeries[i-1] + fibonacciSeries[i-2];
+        }
+
+        System.out.print("Fibonacci Series (First " + 10 + " numbers): ");
+        for (int i = 0; i < n; i++) {
+            System.out.print(fibonacciSeries[i]);
+
+            if (i < n - 1) {
+                System.out.print(", ");
+            }
+        }
+	}
+
+}
+
+
+
+
+
+
+3. Write a program to print all permutations of a string
+
+    public class Permutation {
+    public static void main(String[] args)
+    {
+    	
+    String str = "CAT";
+    System.out.println("Input: " + str);
+    System.out.println("Output:");
+	printPermutations("CAT");
+	
+	 }
+    public static void printPermutations(String input) 
+	{
+	    PermutationsHelperPrint("", input);
+    }
+
+	private static void PermutationsHelperPrint(String prefix, String remain)
+	{
+	     int n = remain.length();
+
+	     if (n == 0) 
+	     {
+	            System.out.println(prefix);
+	      } 
+	     else
+	        {
+	            for (int i = 0; i < n; i++)
+	            {
+	            	PermutationsHelperPrint(
+	                   prefix + remain.charAt(i),
+	                    remain.substring(0, i) + remain.substring(i + 1));
+	                
+	            }
+	        }
+	    }
+	
+	
+
+}
+
+
+
+
+
+4. Write a program to check if two strings are Anagrams?
+
+ import java.util.Arrays;
+ public class CheckAnargam {
+ public static void main(String[] args) {
+		String s1 = "Welcome";
+        String s2 = "ceelmow";
+
+        System.out.println(" string 1: " + s1);
+        System.out.println(" string 2: " + s2);
+
+        if (areAnagrams(s1, s2)) {
+            System.out.println("Output: The strings are anagrams.");
+        } else {
+            System.out.println("Output: The strings are not anagrams.");
+        }
+    }
+  public static boolean areAnagrams(String str1, String str2) {
+        str1 = str1.replaceAll("\\s", "").toLowerCase();
+        str2 = str2.replaceAll("\\s", "").toLowerCase();
+
+        if (str1.length() != str2.length()) {
+            return false;
+        }
+        char[] charArray1 = str1.toCharArray();
+        char[] charArray2 = str2.toCharArray();
+        Arrays.sort(charArray1);
+        Arrays.sort(charArray2);
+
+        return Arrays.equals(charArray1, charArray2);
+    }
+	}
+
+
+
+
+
+
+
+5. Implement stack using queue without using an array or linked list.
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class QueueStack {
+	private Queue<Integer> queue1;
+    private Queue<Integer> queue2;
+
+    public QueueStack() {
+        queue1 = new LinkedList<>();
+        queue2 = new LinkedList<>();
+    }
+public void push(int a) {
+	
+        if (queue1.isEmpty())
+        {
+            queue1.offer(a);
+        } else
+        {
+            queue2.offer(a);
+        }
+    }
+
+ public int pop()
+      {
+        if (isEmpty())
+        {
+            throw new IllegalStateException("Stack  empty");
+        }
+
+        Queue<Integer> nonEmptyQueue = queue1.isEmpty() ? queue2 : queue1;
+        Queue<Integer> emptyQueue = queue1.isEmpty() ? queue1 : queue2;
+
+        while (nonEmptyQueue.size() > 1) {
+            emptyQueue.offer(nonEmptyQueue.poll());
+        }
+
+
+        return nonEmptyQueue.poll();
+    }
+
+    public int top() 
+    {
+        if (isEmpty()) 
+        {
+            throw new IllegalStateException("Stack is empty");
+        }
+
+        Queue<Integer> nonEmptyQueue = queue1.isEmpty() ? queue2 : queue1;
+        Queue<Integer> emptyQueue = queue1.isEmpty() ? queue1 : queue2;
+
+          while (nonEmptyQueue.size() > 1) {
+            emptyQueue.offer(nonEmptyQueue.poll());
+        }
+
+        int topElement = nonEmptyQueue.peek();
+
+        emptyQueue.offer(nonEmptyQueue.poll());
+
+        return topElement;
+    }
+
+    public boolean isEmpty() {
+        return queue1.isEmpty() && queue2.isEmpty();
+    }
+
+    public static void main(String[] args) {
+    	QueueStack stack = new QueueStack();
+        stack.push(2);
+        stack.push(3);
+        stack.push(4);
+
+        System.out.println( stack.top()); 
+        System.out.println(stack.pop());        
+        System.out.println(stack.top());    }
+}
+
+
+
+
+
+
+6. Write a program to reverse a string.
+
+    public class ReverseString {
+
+	public static void main(String[] args) 
+	{
+		 String input = "Welcome";
+	        System.out.println( input);
+
+	        String reversedString = reverseString(input);
+
+	        System.out.println(reversedString);
+	    }
+    public static String reverseString(String str) 
+	    {
+	    	char[] charArray = str.toCharArray();
+	        int start = 0;
+	        int end = charArray.length - 1;
+
+	        while (start < end) {
+	            // Swap characters at start and end indices
+	            char temp = charArray[start];
+	            charArray[start] = charArray[end];
+	            charArray[end] = temp;
+
+	            // Move indices  the center
+	            start++;
+	            end--;
+	        }
+
+	        // Convert the character array back 
+	        return new String(charArray);
+	    }
+	}
+
+
+
+
+
+
+
+
+
+
+
+
